@@ -6,13 +6,23 @@ var currentHour = dayjs().hour();
 console.log(currentHour);
 
 $(document).ready(function () {
-  $('.saveBtn').click(function() {
-    var parentContainer = $(this).closest('.time-block');
-    var timeBlockId = parentContainer.attr('id');
-    // var timeBlockNum = timeBlockId.split('-')[1];
-    localStorage.setItem(timeBlockId, parentContainer.textarea.textContent);
-  })
+  $('.saveBtn').click(saveAppt);
 
+  function saveAppt() {
+    var hourlyEvents = localStorage.getItem('hourlyEvents') || [];
+
+    var timeBlock = $(this).closest('.time-block');
+    var timeBlockId = timeBlock.attr('id');
+    var timeBlockNum = timeBlockId.split('-')[1];
+    var timeConverter = timeBlockNum - 9; 
+    
+    var descBox = $(this).siblings('.description').val(); 
+
+    hourlyEvents[timeConverter] = descBox; 
+
+    console.log(descBox);
+    localStorage.setItem(hourlyEvents);
+  }
   // TODO: Add code to apply the past, present, or future class to each time
   // block by comparing the id to the current hour. HINTS: How can the id
   // attribute of each time-block be used to conditionally add or remove the
@@ -27,9 +37,7 @@ $(document).ready(function () {
   $("#currentDay").text(time);
 });
 
-function saveAppt() {
 
-}
 
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
